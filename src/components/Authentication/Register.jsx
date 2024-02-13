@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import InputField from "./InputField";
 import ActionButton from "./ActionButton";
+import Logo from "./Logo";
 
 const Register = () => {
   // State to store the email and password
@@ -24,6 +25,34 @@ const Register = () => {
 
   // Regex to validate the email address
   const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+
+  // Login box ref
+  const registerBoxRef = useRef(null);
+
+  // Logo top position
+  const [logoTop, setLogoTop] = useState("");
+
+  // Helper function to calculate the logo top position
+  const calculateLogoTop = () => {
+    if (registerBoxRef.current) {
+      const registerBoxTop = registerBoxRef.current.getBoundingClientRect().top;
+      const middlePosition = registerBoxTop / 2 + window.scrollY;
+      if (middlePosition - 13 > 0) setLogoTop(`${middlePosition - 13}px`);
+      else setLogoTop("0px");
+    }
+  };
+
+  // Set the logo top position
+  useEffect(() => {
+    // Calculate the logo top position on mount
+    calculateLogoTop();
+
+    // Recalculate on window resize
+    window.addEventListener("resize", calculateLogoTop);
+
+    // Cleanup function to remove the event listener
+    return () => window.removeEventListener("resize", calculateLogoTop);
+  }, []);
 
   // Placeholder function to handle the Sign Up
   const handleSignUp = (e) => {
@@ -72,7 +101,12 @@ const Register = () => {
 
   return (
     <div className="h-screen flex justify-center items-center">
-      <div className="rounded-3xl bg-box-bg p-8 max-w-md w-full shadow-xl">
+      <Logo logoTop={logoTop} />
+
+      <div
+        ref={registerBoxRef}
+        className="rounded-3xl bg-box-bg p-8 max-w-md w-full shadow-xl"
+      >
         <h1 className="text-heading-l text-white mb-8">Login</h1>
 
         <form onSubmit={handleSignUp} className="space-y-5">

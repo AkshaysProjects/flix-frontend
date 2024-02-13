@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import InputField from "./InputField";
 import ActionButton from "./ActionButton";
+import Logo from "./Logo";
 
 const Login = () => {
   // State to store the email and password
@@ -15,6 +16,34 @@ const Login = () => {
   // State to manage the error message
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
+
+  // Login box ref
+  const loginBoxRef = useRef(null);
+
+  // Logo top position
+  const [logoTop, setLogoTop] = useState("");
+
+  // Helper function to calculate the logo top position
+  const calculateLogoTop = () => {
+    if (loginBoxRef.current) {
+      const loginBoxTop = loginBoxRef.current.getBoundingClientRect().top;
+      const middlePosition = loginBoxTop / 2 + window.scrollY;
+      if (middlePosition - 13 > 0) setLogoTop(`${middlePosition - 13}px`);
+      else setLogoTop("0px");
+    }
+  };
+
+  // Set the logo top position
+  useEffect(() => {
+    // Calculate the logo top position on mount
+    calculateLogoTop();
+
+    // Recalculate on window resize
+    window.addEventListener("resize", calculateLogoTop);
+
+    // Cleanup function to remove the event listener
+    return () => window.removeEventListener("resize", calculateLogoTop);
+  }, []);
 
   // Regex to validate the email address
   const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
@@ -59,9 +88,14 @@ const Login = () => {
 
   return (
     <div className="h-screen flex justify-center items-center">
-      <div className="rounded-3xl bg-box-bg p-8 max-w-md w-full shadow-xl">
+      {/* Logo */}
+      <Logo logoTop={logoTop} />
+      <div
+        ref={loginBoxRef}
+        className="rounded-3xl bg-box-bg p-8 max-w-md w-full shadow-xl"
+      >
         <h1 className="text-heading-l text-white mb-8">Login</h1>
-
+        {/* Login Form*/}
         <form onSubmit={handleLogin} className="space-y-5">
           {/* Email Address Input Field*/}
           <InputField
@@ -93,7 +127,6 @@ const Login = () => {
           />
           <ActionButton text="Login to your account" />
         </form>
-
         {/* Navigate to Sign Up Page */}
         <div className="flex items-center justify-center mt-6">
           <p className="text-sm text-gray-400 mr-2">Don't have an account?</p>
