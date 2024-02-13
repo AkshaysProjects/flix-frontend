@@ -22,9 +22,46 @@ const Register = () => {
   // Instantiate the navigate hook
   const navigate = useNavigate();
 
+  // Regex to validate the email address
+  const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+
   // Placeholder function to handle the Sign Up
   const handleSignUp = (e) => {
     e.preventDefault();
+
+    // Reset the error messages
+    setEmailError("");
+    setPasswordError("");
+    setConfirmPasswordError("");
+
+    // Check if the email is empty
+    if (email === "") {
+      setEmailError("Cannot be empty");
+    }
+    // Validate the email address
+    else if (!emailRegex.test(email)) {
+      setEmailError("Invalid email");
+    }
+
+    // Check if the password is empty
+    if (password === "") {
+      setPasswordError("Cannot be empty");
+    }
+
+    // Check if the confirm password is empty
+    if (confirmPassword === "") {
+      setConfirmPasswordError("Cannot be empty");
+    }
+
+    // Check if the password and confirm password match
+    if (password !== confirmPassword) {
+      setConfirmPasswordError("Passwords do not match");
+    }
+
+    // Break the function if there are any errors
+    if (emailError || passwordError || confirmPasswordError) return;
+
+    // Placeholder for the sign up functionality
     console.log("Signing Up with:", email, password, confirmPassword);
   };
 
@@ -46,6 +83,12 @@ const Register = () => {
             placeholder="Email address"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            error={emailError}
+            focus={emailFocus}
+            onFocusChange={(focus) => {
+              setEmailFocus(focus);
+              setEmailError("");
+            }}
           />
           {/* Password Input Field*/}
           <InputField
@@ -54,6 +97,12 @@ const Register = () => {
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            error={passwordError}
+            focus={passwordFocus}
+            onFocusChange={(focus) => {
+              setPasswordFocus(focus);
+              setPasswordError("");
+            }}
           />
           {/* Confirm Password Input Field*/}
           <InputField
@@ -62,6 +111,12 @@ const Register = () => {
             placeholder="Confirm Password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
+            error={confirmPasswordError}
+            focus={confirmPasswordFocus}
+            onFocusChange={(focus) => {
+              setConfirmPasswordFocus(focus);
+              setConfirmPasswordError("");
+            }}
           />
           <ActionButton text="Create an account" />
         </form>

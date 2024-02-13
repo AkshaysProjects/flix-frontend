@@ -16,15 +16,39 @@ const Login = () => {
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
 
-  // Instantiate the navigate hook
-  const navigate = useNavigate();
-
   // Regex to validate the email address
   const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 
-  // Placeholder function to handle the Login
+  // Instantiate the navigate hook
+  const navigate = useNavigate();
+
+  // Handle login
   const handleLogin = (e) => {
+    // Prevent the default form submission
     e.preventDefault();
+
+    // Reset the error messages
+    setEmailError("");
+    setPasswordError("");
+
+    // Check if the email is empty
+    if (email === "") {
+      setEmailError("Cannot be empty");
+    }
+    // Validate the email address
+    else if (!emailRegex.test(email)) {
+      setEmailError("Invalid email");
+    }
+
+    // Check if the password is empty
+    if (password === "") {
+      setPasswordError("Cannot be empty");
+    }
+
+    // Break the function if there are any errors
+    if (emailError || passwordError) return;
+
+    // Placeholder for the login functionality
     console.log("Logging in with:", email, password);
   };
 
@@ -46,6 +70,12 @@ const Login = () => {
             placeholder="Email address"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            error={emailError}
+            focus={emailFocus}
+            onFocusChange={(focus) => {
+              setEmailFocus(focus);
+              setEmailError("");
+            }}
           />
           {/* Password Input Field*/}
           <InputField
@@ -54,6 +84,12 @@ const Login = () => {
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            error={passwordError}
+            focus={passwordFocus}
+            onFocusChange={(focus) => {
+              setPasswordFocus(focus);
+              setPasswordError("");
+            }}
           />
           <ActionButton text="Login to your account" />
         </form>
