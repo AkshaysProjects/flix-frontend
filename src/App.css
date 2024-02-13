@@ -1,3 +1,30 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  body {
+    @apply font-outfit antialiased text-white bg-dark-bg;
+  }
+}
+
+@layer utilities {
+  .heading-l {
+    @apply text-heading-l font-light;
+  }
+  .heading-m {
+    @apply text-heading-m font-light;
+  }
+  .heading-s {
+    @apply text-heading-s font-medium;
+  }
+  .heading-xs {
+    @apply text-heading-xs font-medium;
+  }
+  .body-m {
+    @apply text-body-m font-light;
+  }
+  .body-s {
+    @apply text-body-s font-light;
+  }
+}
