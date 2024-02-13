@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import InputField from "./InputField";
 import ActionButton from "./ActionButton";
 import Logo from "./Logo";
+import axios from "axios";
+import { useCookies } from "react-cookie";
 
 const Login = () => {
   // State to store the email and password
@@ -22,6 +24,9 @@ const Login = () => {
 
   // Logo top position
   const [logoTop, setLogoTop] = useState("");
+
+  // Cookie hook
+  const [cookie, setCookie] = useCookies(["access_token"]);
 
   // Helper function to calculate the logo top position
   const calculateLogoTop = () => {
@@ -63,9 +68,7 @@ const Login = () => {
     // Check if the email is empty
     if (email === "") {
       setEmailError("Cannot be empty");
-    }
-    // Validate the email address
-    else if (!emailRegex.test(email)) {
+    } else if (!emailRegex.test(email)) {
       setEmailError("Invalid email");
     }
 
@@ -77,8 +80,32 @@ const Login = () => {
     // Break the function if there are any errors
     if (emailError || passwordError) return;
 
-    // Placeholder for the login functionality
-    console.log("Logging in with:", email, password);
+    // Send the login request
+    axios
+      .post(`${process.env.REACT_APP_API_URL}/user/login`, { email, password })
+      .then((response) => {
+        // Set the access token cookie
+        setCookie("access_token", response.data.access_token);
+
+        // Navigate to the dashboard
+        navigate("/");
+      })
+      .catch((err) => {
+        if (err.response) {
+          // Handle specific errors from the server
+          if (err.response.status === 404) {
+            setEmailError("Invalid email");
+          } else if (err.response.status === 401) {
+            setPasswordError("Invalid password");
+          } else {
+            // Display the error in the console
+            console.error("Login Error:", err.response.data);
+          }
+        } else {
+          // Handle server errors
+          console.error("Network Error:", err);
+        }
+      });
   };
 
   // Navigate to Sign Up Page
