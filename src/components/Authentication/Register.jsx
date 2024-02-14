@@ -108,8 +108,9 @@ const Register = () => {
       })
       .then((response) => {
         // Set the access token cookie
-        setCookie("access_token", response.data.access_token);
-
+        setCookie("access_token", response.data.access_token, {
+          maxAge: response.data.expiresIn,
+        });
         // Navigate to the dashboard
         navigate("/");
       })

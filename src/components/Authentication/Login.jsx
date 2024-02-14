@@ -90,7 +90,10 @@ const Login = () => {
       .post(`${process.env.REACT_APP_API_URL}/user/login`, { email, password })
       .then((response) => {
         // Set the access token cookie
-        setCookie("access_token", response.data.access_token);
+        // Make the access token fetch expiry from the response response.data.expiresIn
+        setCookie("access_token", response.data.access_token, {
+          maxAge: response.data.expiresIn,
+        });
 
         // Navigate to the dashboard
         navigate("/");
