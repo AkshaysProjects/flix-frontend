@@ -164,10 +164,10 @@ const Login = () => {
         </form>
         {/* Navigate to Sign Up Page */}
         <div className="flex items-center justify-center mt-6">
-          <p className="text-sm text-gray-400 mr-2">Don't have an account?</p>
+          <p className="text-sm text-white mr-2">Don't have an account?</p>
           <button
             onClick={handleSignupClick}
-            className="text-red-bg text-body-m underline hover:text-red-700"
+            className="text-red-bg text-body-m hover:text-red-700"
           >
             Sign Up
           </button>
