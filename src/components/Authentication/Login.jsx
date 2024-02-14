@@ -26,7 +26,7 @@ const Login = () => {
   const [logoTop, setLogoTop] = useState("");
 
   // Cookie hook
-  const [cookie, setCookie] = useCookies(["access_token"]);
+  const [cookie, setCookie] = useCookies(["access_token", "user"]);
 
   // Helper function to calculate the logo top position
   const calculateLogoTop = () => {
@@ -55,6 +55,11 @@ const Login = () => {
 
   // Instantiate the navigate hook
   const navigate = useNavigate();
+
+  // Navigate to the dashboard if the user is already logged in
+  useEffect(() => {
+    if (cookie.access_token && cookie.user) navigate("/");
+  }, [cookie.access_token, cookie.user, navigate]);
 
   // Handle login
   const handleLogin = (e) => {

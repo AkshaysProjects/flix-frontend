@@ -35,7 +35,7 @@ const Register = () => {
   const [logoTop, setLogoTop] = useState("");
 
   // Cookie hook
-  const [cookie, setCookie] = useCookies(["access_token"]);
+  const [cookie, setCookie] = useCookies(["access_token", "user"]);
 
   // Helper function to calculate the logo top position
   const calculateLogoTop = () => {
@@ -58,6 +58,11 @@ const Register = () => {
     // Cleanup function to remove the event listener
     return () => window.removeEventListener("resize", calculateLogoTop);
   }, []);
+
+  // Navigate to the dashboard if the user is already logged in
+  useEffect(() => {
+    if (cookie.access_token && cookie.user) navigate("/");
+  }, [cookie.access_token, cookie.user, navigate]);
 
   // Placeholder function to handle the Sign Up
   const handleSignUp = (e) => {
