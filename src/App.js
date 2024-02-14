@@ -8,7 +8,10 @@ import { useEffect } from "react";
 import axios from "axios";
 
 function App() {
-  const [cookie, setCookie] = useCookies(["access_token", "user"]);
+  const [cookie, setCookie, removeCookie] = useCookies([
+    "access_token",
+    "user",
+  ]);
 
   useEffect(() => {
     // Helper function to fetch the user data
@@ -32,8 +35,11 @@ function App() {
         });
     };
 
+    // Fetch the user data if the access token is present
     if (cookie.access_token) fetchUser();
-  }, [cookie.access_token, setCookie]);
+    // Remove the user cookie if the access token is removed or expired
+    else if (!cookie.access_token && cookie.user) removeCookie("user");
+  }, [cookie.access_token, cookie.user, setCookie, removeCookie]);
 
   return (
     <>
