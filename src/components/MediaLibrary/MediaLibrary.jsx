@@ -2,10 +2,10 @@ import React, { useRef, useState, useEffect } from "react";
 import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router";
 import axios from "axios";
-import Trending from "./MediaLibrary/Trending";
-import MediaContainer from "./MediaLibrary/MediaContainer";
+import Trending from "./Trending";
+import MediaContainer from "./MediaContainer";
 
-const Home = () => {
+const MediaLibrary = () => {
   // Container ref to check overflow status
   const trendingContainerRef = useRef(null);
 
@@ -212,4 +212,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default MediaLibrary;

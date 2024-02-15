@@ -52,7 +52,10 @@ const MediaCard = ({
       <div className="absolute top-0 right-0 w-full p-3">
         <button
           className="bg-gray-800/80 hover:bg-gray-700 p-2 rounded-md"
-          onClick={onWatchlistClick}
+          onClick={(e) => {
+            e.stopPropagation();
+            onWatchlistClick();
+          }}
         >
           {isWatchlisted ? (
             <FaBookmark className="text-white" />
