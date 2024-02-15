@@ -65,7 +65,7 @@ const Home = () => {
 
   // Function to handle the watchlist click event
   const handleWatchListClick = (id, type) => {
-    if (!user) navigate("/login");
+    if (!cookies.access_token) navigate("/login");
     else {
       const isAlreadyWatchlisted =
         user.watchlist && user.watchlist.some((item) => item._id === id);
@@ -128,6 +128,7 @@ const Home = () => {
     }
   }, []);
 
+  // Use effect to fetch the media list on mount
   useEffect(() => {
     // Define both requests but do not execute them immediately
     const fetchMovies = axios.get(`${process.env.REACT_APP_API_URL}/movies`);
@@ -136,10 +137,17 @@ const Home = () => {
     // Use Promise.all to execute both requests concurrently
     Promise.all([fetchMovies, fetchTVShows])
       .then((responses) => {
-        // responses[0] will be the response from the movies API
-        // responses[1] will be the response from the tvshows API
-        const movies = responses[0].data;
-        const tvShows = responses[1].data;
+        // Add 'type' property to each movie
+        const movies = responses[0].data.map((movie) => ({
+          ...movie,
+          type: "Movie", // Add a type property to each movie object
+        }));
+
+        // Add 'type' property to each TV show
+        const tvShows = responses[1].data.map((tvShow) => ({
+          ...tvShow,
+          type: "TV Show", // Add a type property to each TV show object
+        }));
 
         // Combine movies and tvShows into a single array and update state
         setMediaList([...movies, ...tvShows]);
@@ -150,6 +158,7 @@ const Home = () => {
       });
   }, []); // Only run on mount
 
+  // Use effect to update the media list with isWatchlisted property
   useEffect(() => {
     if (user.watchlist && mediaList) {
       // Create a Set for faster lookups
@@ -175,6 +184,11 @@ const Home = () => {
     }
   }, [user, mediaList]);
 
+  // Refresh the user state on cookie change
+  useEffect(() => {
+    setUser(cookies.user || {});
+  }, [cookies.user]);
+
   return (
     <div className="p-4">
       <div className="ml-4">
@@ -190,8 +204,12 @@ const Home = () => {
                   <MediaCard
                     bannerUrl={media.bannerUrl}
                     title={media.title}
-                    releaseDate={media.releaseDate}
-                    type="Movie"
+                    releaseDate={
+                      media.type === "Movie"
+                        ? media.releaseDate
+                        : media.firstAirDate
+                    }
+                    mediaType={media.type}
                     isTrending={true}
                     onCardClick={() => {
                       handleClick(media._id);
@@ -229,8 +247,17 @@ const Home = () => {
               key={media._id}
               bannerUrl={media.bannerUrl}
               title={media.title}
-              releaseDate={media.releaseDate}
-              type="Movie"
+              releaseDate={
+                media.type === "Movie" ? media.releaseDate : media.firstAirDate
+              }
+              mediaType={media.type}
+              onCardClick={() => {
+                handleClick(media._id);
+              }}
+              isWatchlisted={media.isWatchlisted}
+              onWatchlistClick={() =>
+                handleWatchListClick(media._id, media.type)
+              }
             />
           ))}
         </div>
