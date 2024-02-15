@@ -4,17 +4,18 @@ import { useNavigate } from "react-router";
 import axios from "axios";
 import Trending from "./MediaLibrary/Trending";
 import MediaContainer from "./MediaLibrary/MediaContainer";
+import useScroll from "../hooks/useScroll";
 
 const Home = () => {
   // Container ref to check overflow status
   const trendingContainerRef = useRef(null);
 
+  // Custom hook to handle scrolling
+  const { canScrollLeft, canScrollRight, scrollContent } =
+    useScroll(trendingContainerRef);
+
   // State to store the media list
   const [mediaList, setMediaList] = useState([]);
-
-  // State to check if the container can be scrolled left or right
-  const [canScrollLeft, setCanScrollLeft] = useState(false);
-  const [canScrollRight, setCanScrollRight] = useState(false);
 
   // Get the access token and user cookies
   const [cookies, setCookie] = useCookies(["access_token", "user"]);
@@ -24,41 +25,6 @@ const Home = () => {
 
   // Instantiate the navigate hook
   const navigate = useNavigate();
-
-  // Function to check the overflow status of the container
-  const checkOverflowStatus = () => {
-    // Get the container element
-    const container = trendingContainerRef.current;
-    // Check if the container exists
-    if (container) {
-      // Set the state based on the scroll position
-      setCanScrollLeft(container.scrollLeft > 0);
-      setCanScrollRight(
-        container.scrollLeft + container.clientWidth < container.scrollWidth
-      );
-    }
-  };
-
-  // Function to scroll the container content
-  const scrollContent = (direction) => {
-    // Get the container element
-    const container = trendingContainerRef.current;
-
-    // Set the scroll amount
-    const amount = 500;
-
-    // Calculate the new scroll position based on the direction
-    const newScrollPosition =
-      direction === "left"
-        ? container.scrollLeft - amount
-        : container.scrollLeft + amount;
-
-    // Scroll the container content
-    container.scrollTo({
-      left: newScrollPosition,
-      behavior: "smooth",
-    });
-  };
 
   // Function to handle the click event
   const handleCardClick = (id) => {
@@ -115,20 +81,6 @@ const Home = () => {
       });
     }
   };
-
-  // Use effect to check the overflow status on mount
-  useEffect(() => {
-    const container = trendingContainerRef.current;
-    if (container) {
-      checkOverflowStatus();
-      const handleScroll = () => {
-        checkOverflowStatus();
-      };
-      container.addEventListener("scroll", handleScroll);
-
-      return () => container.removeEventListener("scroll", handleScroll);
-    }
-  }, []);
 
   // Use effect to fetch the media list on mount
   useEffect(() => {
