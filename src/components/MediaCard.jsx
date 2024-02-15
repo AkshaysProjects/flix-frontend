@@ -18,7 +18,10 @@ const MediaCard = ({
 
   return (
     // Card container
-    <div className="mt-4 group relative rounded-lg" onClick={onCardClick}>
+    <div
+      className={`mt-4 group relative rounded-lg ${!isTrending ? "mb-8" : ""}`}
+      onClick={onCardClick}
+    >
       {/* Banner image */}
       <img
         src={bannerUrl}
@@ -35,7 +38,7 @@ const MediaCard = ({
           <div
             className={`text-body-m font-light ${
               isTrending ? "text-white" : "text-light-blue"
-            } mt-1 mb-1`}
+            } mb-1`}
           >
             {releaseYear} • <MediaIcon className="inline-block mx-1" />{" "}
             {mediaType}
