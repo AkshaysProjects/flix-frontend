@@ -16,30 +16,38 @@ function App() {
   useEffect(() => {
     // Helper function to fetch the user data
     const fetchUser = async () => {
-      // Fetch the user data
-      await axios
-        .get(`${process.env.REACT_APP_API_URL}/user/me`, {
-          headers: {
-            Authorization: `Bearer ${cookie.access_token}`,
-          },
-        })
-        .then((response) => {
-          // Set the user cookie
+      try {
+        // Fetch the user data
+        const response = await axios.get(
+          `${process.env.REACT_APP_API_URL}/user/me`,
+          {
+            headers: {
+              Authorization: `Bearer ${cookie.access_token}`,
+            },
+          }
+        );
+
+        // Update the user cookie only if the fetched user is different from the current one
+        if (
+          JSON.stringify(cookie.user) !== JSON.stringify(response.data.user)
+        ) {
           setCookie("user", response.data.user);
-        })
-        .catch((err) => {
-          // If the access token is invalid, remove the access token cookie
-          if (err.response && err.response.status === 401) {
-            setCookie("access_token", "");
-          } else console.error("User Fetch Error:", err);
-        });
+        }
+      } catch (err) {
+        if (err.response && err.response.status === 401) {
+          removeCookie("access_token");
+        } else {
+          console.error("User Fetch Error:", err);
+        }
+      }
     };
 
-    // Fetch the user data if the access token is present
-    if (cookie.access_token) fetchUser();
-    // Remove the user cookie if the access token is removed or expired
-    else if (!cookie.access_token && cookie.user) removeCookie("user");
-  }, [cookie.access_token, cookie.user, setCookie, removeCookie]);
+    if (cookie.access_token) {
+      fetchUser();
+    } else if (!cookie.access_token && cookie.user) {
+      removeCookie("user");
+    }
+  }, [cookie.access_token, cookie.user, removeCookie, setCookie]);
 
   return (
     <>
