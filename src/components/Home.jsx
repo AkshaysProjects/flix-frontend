@@ -61,7 +61,9 @@ const Home = () => {
   };
 
   // Function to handle the click event
-  const handleClick = () => {};
+  const handleCardClick = (id) => {
+    navigate(`/media/${id}`);
+  };
 
   // Function to handle the watchlist click event
   const handleWatchListClick = (id, type) => {
@@ -212,7 +214,7 @@ const Home = () => {
                     mediaType={media.type}
                     isTrending={true}
                     onCardClick={() => {
-                      handleClick(media._id);
+                      handleCardClick(media._id);
                     }}
                     isWatchlisted={media.isWatchlisted}
                     onWatchlistClick={() =>
@@ -252,7 +254,7 @@ const Home = () => {
               }
               mediaType={media.type}
               onCardClick={() => {
-                handleClick(media._id);
+                handleCardClick(media._id);
               }}
               isWatchlisted={media.isWatchlisted}
               onWatchlistClick={() =>

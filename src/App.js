@@ -3,6 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import Home from "./components/Home";
 import Login from "./components/Authentication/Login";
 import Register from "./components/Authentication/Register";
+import Media from "./components/Media";
 import { useCookies } from "react-cookie";
 import { useEffect } from "react";
 import axios from "axios";
@@ -56,6 +57,7 @@ function App() {
         <Route path="/" element=<Home /> />
         <Route path="/login" element=<Login /> />
         <Route path="/register" element=<Register /> />
+        <Route path="/media/:id" element=<Media /> />
       </Routes>
     </>
   );
