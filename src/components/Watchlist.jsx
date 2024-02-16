@@ -2,13 +2,14 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import MediaContainer from "./MediaLibrary/MediaContainer";
-import { selectTVShows } from "../features/media/selectors";
+import { selectWatchlist } from "../features/media/selectors";
 import { toggleWatchlistItem } from "../features/user/userSlice";
 import NavBar from "./NavBar";
+import { fetchMedia } from "../features/media/mediaSlice";
 
 const Watchlist = () => {
   // Access the watchlist list from the Redux store
-  const watchlistList = useSelector(selectTVShows);
+  const watchlistList = useSelector(selectWatchlist);
 
   // Hooks for navigation and dispatching actions
   const navigate = useNavigate();
@@ -23,12 +24,13 @@ const Watchlist = () => {
   };
 
   // Handler for adding or removing an item from the watchlist
-  const handleWatchListClick = (id, type) => {
+  const handleWatchListClick = async (id, type) => {
     if (!access_token) {
       navigate("/login");
       return;
     }
-    dispatch(toggleWatchlistItem({ id, type }));
+    await dispatch(toggleWatchlistItem({ id, type }));
+    dispatch(fetchMedia());
   };
 
   // Render the Watchlist component with the Trending and MediaContainer components
@@ -39,7 +41,7 @@ const Watchlist = () => {
         mediaList={watchlistList}
         handleCardClick={handleCardClick}
         handleWatchListClick={handleWatchListClick}
-        title={"TV Shows"}
+        title={"Watchlist"}
       />
     </div>
   );

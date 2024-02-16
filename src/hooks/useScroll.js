@@ -37,12 +37,23 @@ const useScroll = (containerRef) => {
   useEffect(() => {
     const container = containerRef.current;
 
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.type === "childList") {
+          checkOverflowStatus();
+        }
+      });
+    });
+
     if (container) {
       // Initially check the overflow status
       checkOverflowStatus();
 
       // Add event listener for scroll event
       container.addEventListener("scroll", checkOverflowStatus);
+
+      // Observe for changes in the child elements of the container
+      observer.observe(container, { childList: true, subtree: true });
     }
 
     // Perform an initial check in case the content is already loaded

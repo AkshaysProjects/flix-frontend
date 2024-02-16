@@ -1,12 +1,13 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import Trending from "./MediaLibrary/Trending";
 import MediaContainer from "./MediaLibrary/MediaContainer";
 import useScroll from "../hooks/useScroll";
-import { selectMedia } from "../features/media/selectors";
+import { selectMedia, selectTrending } from "../features/media/selectors";
 import { toggleWatchlistItem } from "../features/user/userSlice";
 import NavBar from "./NavBar";
+import { fetchMedia } from "../features/media/mediaSlice";
 
 const Home = () => {
   // Ref for the trending media container to enable custom scrolling behavior
@@ -18,6 +19,14 @@ const Home = () => {
 
   // Access the media list from the Redux store
   const mediaList = useSelector(selectMedia);
+
+  // Access the trending list from the Redux store
+  const trendingList = useSelector(selectTrending);
+
+  // Log trending list on every change
+  useEffect(() => {
+    console.log(trendingList);
+  }, [trendingList]);
 
   // Hooks for navigation and dispatching actions
   const navigate = useNavigate();
@@ -32,12 +41,13 @@ const Home = () => {
   };
 
   // Handler for adding or removing an item from the watchlist
-  const handleWatchListClick = (id, type) => {
+  const handleWatchListClick = async (id, type) => {
     if (!access_token) {
       navigate("/login");
       return;
     }
-    dispatch(toggleWatchlistItem({ id, type }));
+    await dispatch(toggleWatchlistItem({ id, type }));
+    dispatch(fetchMedia());
   };
 
   // Render the Home component with the Trending and MediaContainer components
@@ -45,7 +55,7 @@ const Home = () => {
     <div className="p-4 pl-32 pt-8">
       <NavBar />
       <Trending
-        mediaList={mediaList}
+        mediaList={trendingList}
         handleCardClick={handleCardClick}
         handleWatchListClick={handleWatchListClick}
         canScrollLeft={canScrollLeft}

@@ -5,6 +5,7 @@ import MediaContainer from "./MediaLibrary/MediaContainer";
 import { selectMovies } from "../features/media/selectors";
 import { toggleWatchlistItem } from "../features/user/userSlice";
 import NavBar from "./NavBar";
+import { fetchMedia } from "../features/media/mediaSlice";
 
 const Movies = () => {
   // Access the movies list from the Redux store
@@ -23,12 +24,13 @@ const Movies = () => {
   };
 
   // Handler for adding or removing an item from the watchlist
-  const handleWatchListClick = (id, type) => {
+  const handleWatchListClick = async (id, type) => {
     if (!access_token) {
       navigate("/login");
       return;
     }
-    dispatch(toggleWatchlistItem({ id, type }));
+    await dispatch(toggleWatchlistItem({ id, type }));
+    dispatch(fetchMedia());
   };
 
   // Render the Movies component with the Trending and MediaContainer components
