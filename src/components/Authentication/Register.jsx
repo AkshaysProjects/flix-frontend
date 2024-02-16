@@ -4,6 +4,8 @@ import InputField from "./InputField";
 import ActionButton from "./ActionButton";
 import Logo from "./Logo";
 import axios from "axios";
+import { fetchUser } from "../../features/user/userSlice";
+import { useDispatch } from "react-redux";
 
 const Register = () => {
   // State to store the email and password
@@ -23,6 +25,9 @@ const Register = () => {
 
   // Instantiate the navigate hook
   const navigate = useNavigate();
+
+  // Instantiate the dispatch hook
+  const dispatch = useDispatch();
 
   // Regex to validate the email address
   const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
@@ -108,6 +113,9 @@ const Register = () => {
       .then((response) => {
         // Set access token in local storage
         localStorage.setItem("access_token", response.data.access_token);
+
+        // Fetch the user data
+        dispatch(fetchUser());
 
         // Navigate to the dashboard
         navigate("/");

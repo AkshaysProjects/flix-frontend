@@ -4,6 +4,8 @@ import InputField from "./InputField";
 import ActionButton from "./ActionButton";
 import Logo from "./Logo";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import { fetchUser } from "../../features/user/userSlice";
 
 const Login = () => {
   // State to store the email and password
@@ -26,6 +28,9 @@ const Login = () => {
 
   // Get the access token from local storage
   const access_token = localStorage.getItem("access_token");
+
+  // Instantiate the dispatch hook
+  const dispatch = useDispatch();
 
   // Helper function to calculate the logo top position
   const calculateLogoTop = () => {
@@ -90,6 +95,9 @@ const Login = () => {
       .then((response) => {
         // Set access token in local storage
         localStorage.setItem("access_token", response.data.access_token);
+
+        // Fetch the user data
+        dispatch(fetchUser());
 
         // Navigate to the dashboard
         navigate("/");

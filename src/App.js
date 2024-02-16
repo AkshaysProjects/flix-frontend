@@ -4,51 +4,23 @@ import Home from "./components/Home";
 import Login from "./components/Authentication/Login";
 import Register from "./components/Authentication/Register";
 import Media from "./components/Media";
-import { useCookies } from "react-cookie";
 import { useEffect } from "react";
-import axios from "axios";
+import { fetchUser } from "./features/user/userSlice";
+import { useDispatch } from "react-redux";
+import { fetchMedia } from "./features/media/mediaSlice";
 
 function App() {
-  const [cookie, setCookie, removeCookie] = useCookies([
-    "access_token",
-    "user",
-  ]);
+  // Get the access token cookie
+  const access_token = localStorage.getItem("access_token");
 
+  // Instantiate the dispatch hook
+  const dispatch = useDispatch();
+
+  // fetchUser async thunk from redux
   useEffect(() => {
-    // Helper function to fetch the user data
-    const fetchUser = async () => {
-      try {
-        // Fetch the user data
-        const response = await axios.get(
-          `${process.env.REACT_APP_API_URL}/user/me`,
-          {
-            headers: {
-              Authorization: `Bearer ${cookie.access_token}`,
-            },
-          }
-        );
-
-        // Update the user cookie only if the fetched user is different from the current one
-        if (
-          JSON.stringify(cookie.user) !== JSON.stringify(response.data.user)
-        ) {
-          setCookie("user", response.data.user);
-        }
-      } catch (err) {
-        if (err.response && err.response.status === 401) {
-          removeCookie("access_token");
-        } else {
-          console.error("User Fetch Error:", err);
-        }
-      }
-    };
-
-    if (cookie.access_token) {
-      fetchUser();
-    } else if (!cookie.access_token && cookie.user) {
-      removeCookie("user");
-    }
-  }, [cookie.access_token, cookie.user, removeCookie, setCookie]);
+    dispatch(fetchUser(access_token));
+    dispatch(fetchMedia());
+  }, [access_token, dispatch]);
 
   return (
     <>
