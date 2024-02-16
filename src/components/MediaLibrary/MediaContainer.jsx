@@ -9,7 +9,7 @@ const Recommended = ({
 }) => {
   return (
     <div className="ml-4">
-      <h1 className="mt-8 text-heading-l text-white">{title}</h1>
+      <h1 className="text-heading-l text-white">{title}</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
         {mediaList.map((media) => (
           <MediaCard

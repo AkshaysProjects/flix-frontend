@@ -12,7 +12,7 @@ const Trending = ({
   containerRef,
 }) => {
   return (
-    <div className="ml-4">
+    <div className="ml-4 mb-8">
       <h1 className="text-heading-l text-white">Trending</h1>
       <div className="relative">
         <div

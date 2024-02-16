@@ -1,23 +1,14 @@
-import React, { useRef } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import Trending from "./MediaLibrary/Trending";
 import MediaContainer from "./MediaLibrary/MediaContainer";
-import useScroll from "../hooks/useScroll";
-import { selectMedia } from "../features/media/selectors";
+import { selectTVShows } from "../features/media/selectors";
 import { toggleWatchlistItem } from "../features/user/userSlice";
 import NavBar from "./NavBar";
 
-const Home = () => {
-  // Ref for the trending media container to enable custom scrolling behavior
-  const trendingContainerRef = useRef(null);
-
-  // Custom hook to provide scrolling functionality based on the container's overflow status
-  const { canScrollLeft, canScrollRight, scrollContent } =
-    useScroll(trendingContainerRef);
-
-  // Access the media list from the Redux store
-  const mediaList = useSelector(selectMedia);
+const Watchlist = () => {
+  // Access the watchlist list from the Redux store
+  const watchlistList = useSelector(selectTVShows);
 
   // Hooks for navigation and dispatching actions
   const navigate = useNavigate();
@@ -40,27 +31,18 @@ const Home = () => {
     dispatch(toggleWatchlistItem({ id, type }));
   };
 
-  // Render the Home component with the Trending and MediaContainer components
+  // Render the Watchlist component with the Trending and MediaContainer components
   return (
     <div className="p-4 pl-32 pt-8">
       <NavBar />
-      <Trending
-        mediaList={mediaList}
-        handleCardClick={handleCardClick}
-        handleWatchListClick={handleWatchListClick}
-        canScrollLeft={canScrollLeft}
-        canScrollRight={canScrollRight}
-        scrollContent={scrollContent}
-        containerRef={trendingContainerRef}
-      />
       <MediaContainer
-        mediaList={mediaList}
+        mediaList={watchlistList}
         handleCardClick={handleCardClick}
         handleWatchListClick={handleWatchListClick}
-        title={"Recommended for you"}
+        title={"TV Shows"}
       />
     </div>
   );
 };
 
-export default Home;
+export default Watchlist;
