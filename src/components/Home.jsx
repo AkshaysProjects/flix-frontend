@@ -23,11 +23,6 @@ const Home = () => {
   // Access the trending list from the Redux store
   const trendingList = useSelector(selectTrending);
 
-  // Log trending list on every change
-  useEffect(() => {
-    console.log(trendingList);
-  }, [trendingList]);
-
   // Hooks for navigation and dispatching actions
   const navigate = useNavigate();
   const dispatch = useDispatch();
