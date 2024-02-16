@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import MediaContainer from "./MediaLibrary/MediaContainer";
@@ -6,8 +6,16 @@ import { selectMovies } from "../features/media/selectors";
 import { toggleWatchlistItem } from "../features/user/userSlice";
 import NavBar from "./NavBar";
 import { fetchMedia } from "../features/media/mediaSlice";
+import axios from "axios";
+import { FaSearch } from "react-icons/fa";
 
 const Movies = () => {
+  // State for the search term
+  const [searchTerm, setSearchTerm] = useState("");
+
+  // State to store the search results
+  const [searchResults, setSearchResults] = useState([]);
+
   // Access the movies list from the Redux store
   const moviesList = useSelector(selectMovies);
 
@@ -33,15 +41,45 @@ const Movies = () => {
     dispatch(fetchMedia());
   };
 
+  // Fetch the search results based on the search term
+  useEffect(() => {
+    const fetchResults = async () => {
+      if (searchTerm) {
+        const movieRes = await axios.get(
+          `${process.env.REACT_APP_API_URL}/movies/search?query=${searchTerm}`
+        );
+        setSearchResults(movieRes.data);
+      } else {
+        setSearchResults([]);
+      }
+    };
+    fetchResults();
+  }, [searchTerm]);
+
   // Render the Movies component with the Trending and MediaContainer components
   return (
     <div className="p-4 pl-32 pt-8">
       <NavBar />
+      <div className="max-w-lg flex items-center align-middle p-4 mb-4">
+        <FaSearch className="relative mr-2" />{" "}
+        <input
+          id="search"
+          type="search"
+          placeholder="Search for movies or TV Shows"
+          className="w-full bg-dark-bg text-body-m text-white outline-none border-b-dark-bg border-b-2 focus:border-b-light-blue transition duration-300 caret-red-500"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+      </div>
       <MediaContainer
-        mediaList={moviesList}
+        mediaList={searchTerm ? searchResults : moviesList}
         handleCardClick={handleCardClick}
         handleWatchListClick={handleWatchListClick}
-        title={"Movies"}
+        title={
+          searchTerm
+            ? `Found ${searchResults.length} results for '${searchTerm}'`
+            : "Movies"
+        }
       />
     </div>
   );
