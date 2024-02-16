@@ -32,7 +32,7 @@ const Trending = ({
                   }
                   mediaType={media.type}
                   isTrending={true}
-                  onCardClick={() => handleCardClick(media._id)}
+                  onCardClick={() => handleCardClick(media._id, media.type)}
                   isWatchlisted={media.isWatchlisted}
                   onWatchlistClick={() =>
                     handleWatchListClick(media._id, media.type)

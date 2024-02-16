@@ -25,7 +25,7 @@ const MediaContainer = ({
               media.type === "Movie" ? media.releaseDate : media.firstAirDate
             }
             mediaType={media.type}
-            onCardClick={() => handleCardClick(media._id)}
+            onCardClick={() => handleCardClick(media._id, media.type)}
             isWatchlisted={media.isWatchlisted}
             onWatchlistClick={() => handleWatchListClick(media._id, media.type)}
           />

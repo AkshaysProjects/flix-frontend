@@ -36,7 +36,7 @@ const Home = () => {
   const access_token = localStorage.getItem("access_token");
 
   // Handler for navigating to the media detail page when a media card is clicked
-  const handleCardClick = (id) => {
+  const handleCardClick = (id, type) => {
     navigate(`/media/${id}`);
   };
 
