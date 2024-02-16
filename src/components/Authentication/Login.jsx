@@ -4,7 +4,6 @@ import InputField from "./InputField";
 import ActionButton from "./ActionButton";
 import Logo from "./Logo";
 import axios from "axios";
-import { useCookies } from "react-cookie";
 
 const Login = () => {
   // State to store the email and password
@@ -25,8 +24,8 @@ const Login = () => {
   // Logo top position
   const [logoTop, setLogoTop] = useState("");
 
-  // Cookie hook
-  const [cookie, setCookie] = useCookies(["access_token", "user"]);
+  // Get the access token from local storage
+  const access_token = localStorage.getItem("access_token");
 
   // Helper function to calculate the logo top position
   const calculateLogoTop = () => {
@@ -58,8 +57,8 @@ const Login = () => {
 
   // Navigate to the dashboard if the user is already logged in
   useEffect(() => {
-    if (cookie.access_token && cookie.user) navigate("/");
-  }, [cookie.access_token, cookie.user, navigate]);
+    if (access_token) navigate("/");
+  }, [access_token, navigate]);
 
   // Handle login
   const handleLogin = (e) => {
@@ -89,11 +88,8 @@ const Login = () => {
     axios
       .post(`${process.env.REACT_APP_API_URL}/user/login`, { email, password })
       .then((response) => {
-        // Set the access token cookie
-        // Make the access token fetch expiry from the response response.data.expiresIn
-        setCookie("access_token", response.data.access_token, {
-          maxAge: response.data.expiresIn,
-        });
+        // Set access token in local storage
+        localStorage.setItem("access_token", response.data.access_token);
 
         // Navigate to the dashboard
         navigate("/");
