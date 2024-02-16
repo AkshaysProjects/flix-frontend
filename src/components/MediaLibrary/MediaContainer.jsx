@@ -1,7 +1,7 @@
 import React from "react";
 import MediaCard from "./MediaCard";
 
-const Recommended = ({
+const MediaContainer = ({
   mediaList,
   handleCardClick,
   handleWatchListClick,
@@ -10,7 +10,12 @@ const Recommended = ({
   return (
     <div className="ml-4">
       <h1 className="text-heading-l text-white">{title}</h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+      <div
+        className="grid grid-flow-row auto-rows-max gap-8"
+        style={{
+          gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
+        }}
+      >
         {mediaList.map((media) => (
           <MediaCard
             key={media._id}
@@ -30,4 +35,4 @@ const Recommended = ({
   );
 };
 
-export default Recommended;
+export default MediaContainer;
