@@ -183,7 +183,7 @@ const Register = () => {
           {/* Confirm Password Input Field*/}
           <InputField
             id="confirmPassword"
-            type="confirmPassword"
+            type="password"
             placeholder="Confirm Password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
