@@ -33,10 +33,6 @@ const Watchlist = () => {
 
   // Handler for adding or removing an item from the watchlist
   const handleWatchListClick = async (id, type) => {
-    if (!access_token) {
-      navigate("/login");
-      return;
-    }
     await dispatch(toggleWatchlistItem({ id, type }));
     dispatch(fetchMedia());
   };
@@ -58,6 +54,14 @@ const Watchlist = () => {
     };
     fetchResults();
   }, [searchTerm]);
+
+  // Redirect to /login if not logged in on mount
+  useEffect(() => {
+    if (!access_token) {
+      navigate("/login");
+      return;
+    }
+  }, [])
 
   // Render the Watchlist component with the Trending and MediaContainer components
   return (
