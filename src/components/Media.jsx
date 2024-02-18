@@ -44,6 +44,7 @@ const Media = () => {
   }
 
   const isMovie = media.type === "Movie";
+  console.log(media.type);
 
   return (
     <div className="flex justify-center items-center h-screen lg:w-3/4 mx-auto overflow-x-auto">
