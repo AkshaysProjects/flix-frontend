@@ -76,7 +76,7 @@ const NavBar = () => {
 
   // Render the NavBar component
   return (
-    <nav className="flex justify-between items-center p-4 bg-box-bg lg:w-20 lg:flex-col lg:fixed lg:inset-y-0 lg:left-0 lg:z-50 lg:m-8 lg:rounded-xl">
+    <nav className="flex justify-between items-center p-4 bg-box-bg sm:w-[95%] sm:mx-auto sm:mt-4 sm:rounded-xl lg:flex-col lg:fixed lg:inset-y-0 lg:left-0 lg:z-50 lg:m-8 lg:rounded-xl">
       {/* Logo */}
       <NavLink to="/" className="lg:p-2">
         <img src={Logo} alt="Logo" className="w-10 lg:w-full" />
