@@ -9,7 +9,7 @@ const Media = () => {
   const { id } = useParams();
 
   // Use the custom hook to fetch media data
-  const { media, casts, urls, error } = useMedia(id); // Removed navigate from useMedia as it's not used within the hook
+  const { media, casts, urls, type, error } = useMedia(id); // Removed navigate from useMedia as it's not used within the hook
 
   // Function to render stars based on the rating
   const renderStars = (rating) => {
@@ -34,17 +34,11 @@ const Media = () => {
     return stars;
   };
 
-  if (error) {
-    // Handle error state
-    return <div>Error loading media details.</div>;
-  }
-
   if (!media) {
     return <div>Loading...</div>; // or loading indicator
   }
 
-  const isMovie = media.type === "Movie";
-  console.log(media.type);
+  const isMovie = type === "Movie";
 
   return (
     <div className="flex justify-center items-center h-screen lg:w-3/4 mx-auto overflow-x-auto">
@@ -72,14 +66,24 @@ const Media = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-4 gap-2 text-body-s mb-4">
             {isMovie && (
-              <div>
-                <div className="text-body-m font-bold text-gray-400">
-                  Length
+              <>
+                <div>
+                  <div className="text-body-m font-bold text-gray-400">
+                    Length
+                  </div>
+                  <div className="text-body-m font-bold">
+                    {media.runtime} min.
+                  </div>
                 </div>
-                <div className="text-body-m font-bold">
-                  {media.runtime} min.
+                <div>
+                  <div className="text-body-m font-bold text-gray-400">
+                    Release Year
+                  </div>
+                  <div className="text-body-m font-bold">
+                    {new Date(media.releaseDate).getFullYear()}
+                  </div>
                 </div>
-              </div>
+              </>
             )}
             {!isMovie && (
               <>

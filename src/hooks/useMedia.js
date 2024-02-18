@@ -69,10 +69,10 @@ const useMedia = (id) => {
   }, [type, id]);
 
   if (error) {
-    return { media: null, casts: [], urls: {}, error };
+    return { media: null, casts: [], urls: {}, type: null, error };
   }
 
-  return { media, casts, urls };
+  return { media, casts, urls, type };
 };
 
 export default useMedia;
