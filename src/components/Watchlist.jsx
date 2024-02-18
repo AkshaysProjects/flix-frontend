@@ -61,7 +61,7 @@ const Watchlist = () => {
       navigate("/login");
       return;
     }
-  }, []);
+  }, [access_token, navigate]);
 
   // Render the Watchlist component with the Trending and MediaContainer components
   return (
