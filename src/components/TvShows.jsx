@@ -58,30 +58,32 @@ const TvShows = () => {
 
   // Render the TvShows component with the Trending and MediaContainer components
   return (
-    <div className="p-4 pl-32 pt-8">
+    <>
       <NavBar />
-      <div className="max-w-lg flex items-center align-middle p-4 mb-4">
-        <FaSearch className="relative mr-2" />{" "}
-        <input
-          id="search"
-          type="search"
-          placeholder="Search for movies or TV Shows"
-          className="w-full bg-dark-bg text-body-m text-white outline-none border-b-dark-bg border-b-2 focus:border-b-light-blue transition duration-300 caret-red-500"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
+      <div className="p-4 pl-6 md:pl-10 lg:pl-32 pt-8">
+        <div className="max-w-lg flex items-center align-middle p-4 mb-4">
+          <FaSearch className="relative mr-2" />{" "}
+          <input
+            id="search"
+            type="search"
+            placeholder="Search for movies or TV Shows"
+            className="w-full bg-dark-bg text-body-m text-white outline-none border-b-dark-bg border-b-2 focus:border-b-light-blue transition duration-300 caret-red-500"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
+        <MediaContainer
+          mediaList={searchTerm ? searchResults : tvShowsList}
+          handleCardClick={handleCardClick}
+          handleWatchListClick={handleWatchListClick}
+          title={
+            searchTerm
+              ? `Found ${searchResults.length} results for '${searchTerm}'`
+              : "TV Shows"
+          }
         />
       </div>
-      <MediaContainer
-        mediaList={searchTerm ? searchResults : tvShowsList}
-        handleCardClick={handleCardClick}
-        handleWatchListClick={handleWatchListClick}
-        title={
-          searchTerm
-            ? `Found ${searchResults.length} results for '${searchTerm}'`
-            : "TV Shows"
-        }
-      />
-    </div>
+    </>
   );
 };
 
