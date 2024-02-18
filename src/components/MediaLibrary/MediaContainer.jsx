@@ -21,7 +21,7 @@ const MediaContainer = ({
   }, []);
 
   return (
-    <div>
+    <div className="ml-4 mr-4">
       <h1 className="text-heading-m sm:text-heading-l text-white">{title}</h1>
       <div
         className="grid grid-flow-row auto-rows-max gap-8"
