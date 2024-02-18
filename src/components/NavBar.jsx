@@ -7,17 +7,27 @@ import { useDispatch, useSelector } from "react-redux";
 import { clearUser } from "../features/user/userSlice";
 
 const NavBar = () => {
-  // State and refs
+  // States for showing the profile options popup
   const [showProfileOptions, setShowProfileOptions] = useState(false);
   const [popupPosition, setPopupPosition] = useState({ top: 0, left: 0 });
+
+  // Ref for the profile icon to calculate the popup position
   const profileRef = useRef(null);
 
-  // Redux state and dispatch
+  // Get the current location to highlight the active link
   const { pathname } = useLocation();
   const location = pathname.split("/")[1];
+
+  // Access the user data from the Redux store
   const user = useSelector((state) => state.user);
+
+  // Initialize the dispatch function
   const dispatch = useDispatch();
+
+  // Initialize the navigate function
   const navigate = useNavigate();
+
+  // Retrieve the access token from local storage to check user authentication
   const access_token = localStorage.getItem("access_token");
 
   // Logout function
@@ -28,11 +38,15 @@ const NavBar = () => {
 
   // Effect for calculating popup position
   useEffect(() => {
+    // Function to calculate the popup position based on the profile icon position
     const calculatePopupPosition = () => {
+      // Check if the profile icon ref and the showProfileOptions state are available
       if (profileRef.current && showProfileOptions) {
+        // Get the bounding rectangles for the profile icon and its parent
         const profileRect = profileRef.current.getBoundingClientRect();
         const navbarRect =
           profileRef.current.parentElement.getBoundingClientRect();
+        // Set the popup position based on the profile icon position
         const popupPos =
           profileRect.bottom > profileRect.left
             ? {
@@ -43,18 +57,24 @@ const NavBar = () => {
                 top: navbarRect.bottom + 8,
                 left: navbarRect.right - 260,
               };
+        // Update the popup position state
         setPopupPosition(popupPos);
       }
     };
 
+    // Invoke the function to calculate the initial popup position
     calculatePopupPosition();
+
+    // Add event listener for window resize to recalculate the popup position
     window.addEventListener("resize", calculatePopupPosition);
 
+    // Cleanup function to remove the event listener
     return () => {
       window.removeEventListener("resize", calculatePopupPosition);
     };
   }, [showProfileOptions]);
 
+  // Render the NavBar component
   return (
     <nav className="flex justify-between items-center p-4 bg-box-bg lg:w-20 lg:flex-col lg:fixed lg:inset-y-0 lg:left-0 lg:z-50 lg:m-8 lg:rounded-xl">
       {/* Logo */}
