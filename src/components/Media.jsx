@@ -46,12 +46,12 @@ const Media = () => {
   const isMovie = media.type === "Movie";
 
   return (
-    <div className="flex justify-center items-center h-screen w-3/4 mx-auto">
-      <div className="p-8 text-white rounded-lg flex">
+    <div className="flex justify-center items-center h-screen lg:w-3/4 mx-auto overflow-x-auto">
+      <div className="p-8 text-white rounded-lg flex max-h-screen">
         <img
           src={media.posterUrl}
           alt={media.title}
-          className="w-72 h-108 object-cover rounded-lg mr-8"
+          className="w-[30%] h-[60%] object-cover rounded-lg mr-8"
           style={{ maxWidth: "250px", maxHeight: "375px" }}
         />
         <div className="flex flex-col">
